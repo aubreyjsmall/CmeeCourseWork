@@ -1,0 +1,58 @@
+#Question 1
+#Count file lines. Use wc -l on each supplied FASTA file. This counts newline characters, not visual lines or sequence positions. 
+
+# wc counts newline characers, words, and bytes, wc -l counts newlines
+#  use wildcards to compare more directly 
+
+wc -l ../data/fasta/*.fasta
+
+#returns 27 407228326.fasta
+#        127 407228412.fasta
+#        78104 e_coli.fasta
+#        78258 total
+
+#Explain why the two numbered files’ counts are one lower than their displayed line counts: their final lines are not newline-terminated.
+#Inspecting the tails of the three fasta files shows that the the numbered files do not end in a newline 
+
+#Question 2
+#Display the E. coli sequence lines. Print everything starting from the second line of e_coli.fasta. Explain why the header is excluded and what tail -n +2 means.
+
+tail -n +2 ../data/fasta/e_coli.fasta
+
+#Tail -n normally means to print the last n lines, +2 changes the meaning so that it starts at the second line and prints everything from there to the end
+
+#Question 3 
+#Count sequence length. For e_coli.fasta, exclude the header and line-ending characters, then count all sequence symbols. Include ambiguous nucleotide positions such as N, R, Y, M, and W: length counts positions, not only confidently identified A/C/G/T bases.
+
+tail -n +2 ../data/fasta/e_coli.fasta | tr -d '\n' | wc -c 
+
+#tail -n +2 excludes the header
+# tr  -d '\n' Translate 
+#-d '\n' removes the characters listed
+# wc -c counts bytes (one per character here)
+#returns 4686137
+
+#Question 4
+#Count a literal motif. Count every occurrence of ATGC in the E. coli sequence, not just the number of lines containing it. Remove the header and line breaks first so wrapping cannot hide a match. grep -c counts matching lines; a match-only output such as grep -o lets you count occurrences. Keep ambiguous symbols in the sequence: deleting one could join separated bases and invent a match. The supplied motif cannot overlap with itself.
+
+tail -n +2 ../data/fasta/e_coli.fasta | tr -d '\n' | grep -o ATGC | wc -l
+
+# returns 21968
+
+#Question 5
+#Calculate the AT/GC ratio. Report  (A + T)/(G + C) as one number, using counts of the four canonical DNA bases. This is not the GC fraction (G + C)/(A + T + G + C). Count only A, T, G, and C for this calculation; do not guess the identities of ambiguous positions. If G+C is zero, the ratio is undefined rather than zero; the supplied E. coli sequence has nonzero GC count.
+
+# echo "scale=6; ( $(A count) + $(T count) ) / ( $(G count) + $(C count) )" | bc
+
+echo "($(tail -n +2 ../data/fasta/e_coli.fasta | tr -d '\n' | grep -o -i A | wc -l) + $(tail -n +2 ../data/fasta/e_coli.fasta | tr -d '\n' | grep -o -i T | wc -l)) / ($(tail -n +2 ../data/fasta/e_coli.fasta | tr -d '\n' | grep -o -i G | wc -l) + $(tail -n +2 ../data/fasta/e_coli.fasta | tr -d '\n' | grep -o -i C | wc -l ))" | bc -l
+
+# echo "" : Prints a string.
+# $() : Runs a command and substitute its standard output.
+# tail -n +2 ../data/fasta/e_coli.fasta : excludes the header
+# tr -d '\n' : removes the newline characters 
+# grep -o (A,T,G,C) : lets you count occurrences
+# -i : to make the matching case-insensitive
+# wc -l : counts 
+# bc -l : Bash’s native arithmetic uses integers, bc, -l loads the standard maths library and sets the default decimal scale to 20.
+
+#returns .96922822848944879586

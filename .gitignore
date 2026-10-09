@@ -1,3 +1,7 @@
 *~
 *.tmp
 .DS_Store
+sandbox/
+.DS_Store
+.Rhistory
+sandbox/
