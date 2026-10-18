@@ -6,7 +6,6 @@
 # Arguments: 1-> Tab-delimited file
 # Date: Oct 2026
 
-Echo "Creating a comma delimited version of $1 ..."
 
 #Accept exactly one readable tab-delimited input file. 
 #check if the number of arguments is not equal to 1
@@ -22,12 +21,16 @@ if [[ ! -f "$1" || ! -r "$1" ]]; then
     exit 1
 fi
 
+echo "Creating a comma delimited version of $1 ..."
 
 #Leave the input unchanged. Write the result to ../results/<input-filename>.csv. Make the results folder if it isn't there
 
-mkdir -p ../results
+script_dir=$(dirname "$0")
+results_dir="$script_dir/../results"
 
-output="../results/$(basename "$1").csv"
+mkdir -p "$results_dir"
+
+output="$results_dir/$(basename "$1").csv"
 
 #convert tabs to commas and write to the output file and check if the conversion was successful
 

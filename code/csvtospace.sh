@@ -22,9 +22,12 @@ fi
 
 #Leave the input unchanged. Write the result to ../results/<input-filename>.txt. Make the results folder if it isn't there
 
-mkdir -p ../results
+script_dir=$(dirname "$0")
+results_dir="$script_dir/../results"
 
-output="../results/$(basename "$1").txt"
+mkdir -p "$results_dir"
+
+output="$results_dir/$(basename "$1").csv"
 
 #convert commas to spaces and write to the output file and check if the conversion was successful
 
