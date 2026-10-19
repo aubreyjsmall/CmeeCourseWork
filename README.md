@@ -15,7 +15,9 @@
 - A UNIX-like system with Bash (tested on macOS)
 - Standard commands: `tr`, `basename`, `dirname`, `mkdir`, `wc`, `grep`, `tail`, `sed`
 
-## UNIX practical: FASTA genome sequences
+## Assignment 1: Unix, Shell and Git
+
+### UNIX practical: FASTA genome sequences
 **Purpose:** Inspect and summarise the supplied FASTA genome files using single-line UNIX commands.
 **Files:**
 
@@ -25,19 +27,15 @@
   - `407228412.fasta`
   - `e_coli.fasta`
 
-**Usage:** Open `code/unixPrac1.txt` and run each numbered command from inside `code/`. Input files are read from `../data/fasta/`.
+**Usage:** Open `code/unixPrac1.txt` and run each numbered command from inside `CMEECourseWork/`. Input files are read from `../data/fasta/`.
 
 **What `unixPrac1.txt` contains:** one single-line command for each question (Q1 to Q5), each followed by a short explanation of what it does and what the result counts.
 
 
-## Coursework for the Shell scripting chapter.
-
 ### tabtocsv.sh
 **Purpose:** Converts a tab-delimited file into a comma-delimited file.
-**Usage** (from `code/`):
-``bash
+**Usage** (from `CMEECourseWork/`):
 bash tabtocsv.sh <tab_delimited_file>
-```
 
 **Behaviour:**
 - Accepts exactly one readable input file and leaves it unchanged. 
@@ -49,40 +47,10 @@ bash tabtocsv.sh <tab_delimited_file>
 - Preserves empty fields: consecutive tabs become consecutive commas.
 - Leaves the input file unchanged.
 - With no argument, prints a usage message to standard error and exits with status 2.
-- With a missing or unreadable file, prints an error to standard error and exits with status 1.
+- With a missing or unreadable file, prints an error to standard error and exits with status 1
 
-### csvtospace.sh
-**Purpose:** Converts a comma-separated file into a space-separated file.
-**Usage** (from `code/`):
-```bash
-bash csvtospace.sh <csv_file>
-```
+**Testing:** All tests used disposable files created in the sandbox directory, never the original data. Scripts were run from `code/`.
 
-**Behaviour:**
-- Accepts exactly one readable input file and leaves it unchanged. 
-- Paths containing spaces are supported.
-- Writes the result to `../results/<input-filename>.txt`
-  (e.g. `1800.csv` produces `../results/1800.csv.txt`).
-- Creates `../results/` if it does not exist.
-- Replaces the previous output on a rerun rather than appending.
-- Preserves empty fields: consecutive tabs become consecutive commas.
-- Leaves the input file unchanged.
-- With no argument, prints a usage message to standard error and exits with status 2.
-- With a missing or unreadable file, prints an error to standard error and exits with status 1.
-
-
-## Limitations
-- Both scripts use simple character substitution with `tr`. They are not general parsers.
-- A comma inside a quoted CSV field is data, but these scripts would treat it as a separator.
-- Quoted fields, embedded newlines, and escaping are not handled.
-- In the space-separated output, a space inside a field cannot be told apart from a separator.
-
-
-## Testing
-All tests used disposable files created in the sandbox directory, never the original data. Scripts were run from `code/`.
-
-
-### tabtocsv.sh
 | Test | Command | Expected | Observed |
 |---|---|---|---|
 | Normal run | `bash tabtocsv.sh "$shell_practice/test.txt"` | Output in `../results/test.txt.csv` | [Creating a comma delimited version of /var/folders/vd/3r7d4bpj2tdc5j51j9d96jtw0000gn/T/tmp.Og1zEF5z8S/test.txt ...
@@ -101,12 +69,36 @@ error: file 'nothere.txt' does not exist or is not readable] [1] |
 | Input unchanged | `cat "$shell_practice/test.txt"` | Same as the original | [species count
 oak             12] |
 
+**Limitations**
+- Both scripts use simple character substitution with `tr`. They are not general parsers.
+- A comma inside a quoted CSV field is data, but these scripts would treat it as a separator.
+- Quoted fields, embedded newlines, and escaping are not handled.
+- In the space-separated output, a space inside a field cannot be told apart from a separator.
 
 ### csvtospace.sh
+**Purpose:** Converts a comma-separated file into a space-separated file.
+**Usage** (from `CMEECourseWork/`):
+bash csvtospace.sh <csv_file>
+
+**Behaviour:**
+- Accepts exactly one readable input file and leaves it unchanged. 
+- Paths containing spaces are supported.
+- Writes the result to `../results/<input-filename>.txt`
+  (e.g. `1800.csv` produces `../results/1800.csv.txt`).
+- Creates `../results/` if it does not exist.
+- Replaces the previous output on a rerun rather than appending.
+- Preserves empty fields: consecutive tabs become consecutive commas.
+- Leaves the input file unchanged.
+- With no argument, prints a usage message to standard error and exits with status 2.
+- With a missing or unreadable file, prints an error to standard error and exits with status 1.
+
+
+**Testing**
+All tests used disposable files created in the sandbox directory, never the original data. Scripts were run from `code/`.
 
 | Test | Command | Expected | Observed |
 |---|---|---|---|
-| Normal run | `bash csvtospace.sh "$shell_practice/test.csv"` | Output in `../results/test.csv.txt` | [Done! Output is in ../results/test.csv.txt] |
+| Normal run | `bash csvtospace. sh " $ shell_practice/test.csv " 'sh "$shell_practice/test.csv"` | Output in `../results/test.csv.txt` | [Done! Output is in ../results/test.csv.txt] |
 | Empty field kept | `sed -n 2p ../results/test.csv.txt \| tr ' ' '_'` | `oak__12` | [oak__12] |
 | Rerun | Run again, then `wc -l ../results/test.csv.txt` | Still 2 lines | [2 ../results/test.csv.txt] |
 | Path with spaces | `bash csvtospace.sh "$shell_practice/field notes.csv"` | Works without errors | [Done! Output is in ../results/field notes.csv.txt] |
@@ -115,11 +107,87 @@ oak             12] |
 | Input unchanged | `cat "$shell_practice/test.csv"` | Still comma-separated | [species,count
 oak,,12] |
 
-## AI use
+**Limitations**
+- Both scripts use simple character substitution with `tr`. They are not general parsers.
+- A comma inside a quoted CSV field is data, but these scripts would treat it as a separator.
+- Quoted fields, embedded newlines, and escaping are not handled.
+- In the space-separated output, a space inside a field cannot be told apart from a separator.
 
+## Assignment 2: Biological Computing in Python 
+
+### Practical: validating tree-survey records
+
+**Purpose:** Validate and clean the synthetic Silwood tree survey. Each record is either accepted (with its text normalised to a standard spelling) or rejected with the reason(s) it failed. The script also counts the accepted oak (Quercus) records by species.
+**Usage** (from `CMEECourseWork/`):
+python3 code/clean_silwood_trees.py
+
+**Behaviour:**
+- Reads the input file and leaves it unchanged.
+- Creates results/ if it does not exist.
+- Replaces all three output files on a rerun rather than appending.
+- Only accepted records reserve a record_id. If an ID appears twice, the first valid record is kept and later copies are rejected as duplicate record_id. A rejected row does not block a later row that uses the same ID.
+- Every input record ends up in exactly one place: the clean file or the issues file.
+
+
+**Testing** 
+| Test | Command | Expected | Observed |
+|---|---|---|---|
+| Good Record | ---|---|---|
+
+## Assignment 3: Biological Computing in R 
+
+### Calculate tree heights
+**Purpose:** This function calculates the heights of trees given the distance of each tree from its base and the angle to its top, using  the trigonometric formula 
+**Files:**
+- Input data: `data/trees.csv`, copied from the course repository's `content/data/trees.csv` directory. The supplied originals are not modified.
+**Usage** (from `CMEECourseWork/`):
+Rscript code/TreeHeight.R
+
+**Behaviour:**
+- Accepts exactly one readable input file and leaves it unchanged.
+- Inspects the header and first few rows of the input CSV
+- Checks the input:
+      1. Do the three columns (Species, Distance.m, and Angle.degrees) exist
+      2. Are Distance.m and Angle.degrees numeric
+      3. Are Distance.m and Angle.degrees finite — No NA, NAN, or Inf values
+      4. Are the values for Distance.m in the range (0 < Distance.m <= 100)
+      5. Are the values for Angle.degrees in the range (0 < Angle.degrees < 90)
+- Calculates tree heights for all trees in the data
+- Adds Tree height as a column
+- Builds a four-column table
+- Writes the result to `../results/<input-filename>.csv`
+- Creates `../results/` if it does not exist.
+- Replaces the previous output on a rerun rather than appending.
+- Leaves the input file unchanged.
+- Prints "Script complete :)" when done. 
+
+**Testing** 
+| Test | Command | Expected | Observed |
+|---|---|---|---|
+| Header and row count | check <- read.csv("results/TreeHts.csv"), head(check), str(check)| data.frame':	120 obs. of  4 variables: | data.frame':	120 obs. of  4 variables: |
+Check one height independently with a short R expression | 31.66583 * tan(41.28264 * pi/ 180) | same result as in result table (27.80212) | [1] 27.80212 | 
+| Rerun and recheck | Rscript code/TreeHeight.R | 120 obs. of  4 variables: (Not 240) | 'data.frame':	120 obs. of  4 variables: | 
+| Run using source | source("code/TreeHeight.R") | same output as Rscript code/TreeHeight.R | same output as Rscript code/TreeHeight.R | 
+
+**Limitations**
+
+### Analyze Pound Hill species richness
+**Purpose:** 
+**Usage**
+**Files:**
+
+
+**Behaviour:**
+
+**Testing** 
+| Test | Command | Expected | Observed |
+|---|---|---|---|
+
+
+
+## AI use
 Record of how I used AI.
 - **Tool:** Claude (Anthropic)
-- **Dates:** 18/10/26 , 
 - **Purpose:** explanations of the course notes, help with documentation, interpreting errors and git problems, and suggestions for tests.
   
 
