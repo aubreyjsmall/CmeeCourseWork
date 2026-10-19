@@ -15,7 +15,9 @@
 - A UNIX-like system with Bash (tested on macOS)
 - Standard commands: `tr`, `basename`, `dirname`, `mkdir`, `wc`, `grep`, `tail`, `sed`
 
-## UNIX practical: FASTA genome sequences
+## Assignment 1: Unix, Shell and Git
+
+### UNIX practical: FASTA genome sequences
 **Purpose:** Inspect and summarise the supplied FASTA genome files using single-line UNIX commands.
 **Files:**
 
@@ -30,14 +32,10 @@
 **What `unixPrac1.txt` contains:** one single-line command for each question (Q1 to Q5), each followed by a short explanation of what it does and what the result counts.
 
 
-## Coursework for the Shell scripting chapter.
-
 ### tabtocsv.sh
 **Purpose:** Converts a tab-delimited file into a comma-delimited file.
 **Usage** (from `code/`):
-``bash
 bash tabtocsv.sh <tab_delimited_file>
-```
 
 **Behaviour:**
 - Accepts exactly one readable input file and leaves it unchanged. 
@@ -49,40 +47,10 @@ bash tabtocsv.sh <tab_delimited_file>
 - Preserves empty fields: consecutive tabs become consecutive commas.
 - Leaves the input file unchanged.
 - With no argument, prints a usage message to standard error and exits with status 2.
-- With a missing or unreadable file, prints an error to standard error and exits with status 1.
+- With a missing or unreadable file, prints an error to standard error and exits with status 1
 
-### csvtospace.sh
-**Purpose:** Converts a comma-separated file into a space-separated file.
-**Usage** (from `code/`):
-```bash
-bash csvtospace.sh <csv_file>
-```
+**Testing:** All tests used disposable files created in the sandbox directory, never the original data. Scripts were run from `code/`.
 
-**Behaviour:**
-- Accepts exactly one readable input file and leaves it unchanged. 
-- Paths containing spaces are supported.
-- Writes the result to `../results/<input-filename>.txt`
-  (e.g. `1800.csv` produces `../results/1800.csv.txt`).
-- Creates `../results/` if it does not exist.
-- Replaces the previous output on a rerun rather than appending.
-- Preserves empty fields: consecutive tabs become consecutive commas.
-- Leaves the input file unchanged.
-- With no argument, prints a usage message to standard error and exits with status 2.
-- With a missing or unreadable file, prints an error to standard error and exits with status 1.
-
-
-## Limitations
-- Both scripts use simple character substitution with `tr`. They are not general parsers.
-- A comma inside a quoted CSV field is data, but these scripts would treat it as a separator.
-- Quoted fields, embedded newlines, and escaping are not handled.
-- In the space-separated output, a space inside a field cannot be told apart from a separator.
-
-
-## Testing
-All tests used disposable files created in the sandbox directory, never the original data. Scripts were run from `code/`.
-
-
-### tabtocsv.sh
 | Test | Command | Expected | Observed |
 |---|---|---|---|
 | Normal run | `bash tabtocsv.sh "$shell_practice/test.txt"` | Output in `../results/test.txt.csv` | [Creating a comma delimited version of /var/folders/vd/3r7d4bpj2tdc5j51j9d96jtw0000gn/T/tmp.Og1zEF5z8S/test.txt ...
@@ -101,8 +69,32 @@ error: file 'nothere.txt' does not exist or is not readable] [1] |
 | Input unchanged | `cat "$shell_practice/test.txt"` | Same as the original | [species count
 oak             12] |
 
+**Limitations**
+- Both scripts use simple character substitution with `tr`. They are not general parsers.
+- A comma inside a quoted CSV field is data, but these scripts would treat it as a separator.
+- Quoted fields, embedded newlines, and escaping are not handled.
+- In the space-separated output, a space inside a field cannot be told apart from a separator.
 
 ### csvtospace.sh
+**Purpose:** Converts a comma-separated file into a space-separated file.
+**Usage** (from `code/`):
+bash csvtospace.sh <csv_file>
+
+**Behaviour:**
+- Accepts exactly one readable input file and leaves it unchanged. 
+- Paths containing spaces are supported.
+- Writes the result to `../results/<input-filename>.txt`
+  (e.g. `1800.csv` produces `../results/1800.csv.txt`).
+- Creates `../results/` if it does not exist.
+- Replaces the previous output on a rerun rather than appending.
+- Preserves empty fields: consecutive tabs become consecutive commas.
+- Leaves the input file unchanged.
+- With no argument, prints a usage message to standard error and exits with status 2.
+- With a missing or unreadable file, prints an error to standard error and exits with status 1.
+
+
+**Testing**
+All tests used disposable files created in the sandbox directory, never the original data. Scripts were run from `code/`.
 
 | Test | Command | Expected | Observed |
 |---|---|---|---|
@@ -114,6 +106,22 @@ oak             12] |
 | Nonexistent file | `bash csvtospace.sh nothere.csv; echo "$?"` | Error message, status 1 | [error: file 'nothere.csv' does not exist or is not readable] [1] |
 | Input unchanged | `cat "$shell_practice/test.csv"` | Still comma-separated | [species,count
 oak,,12] |
+
+**Limitations**
+- Both scripts use simple character substitution with `tr`. They are not general parsers.
+- A comma inside a quoted CSV field is data, but these scripts would treat it as a separator.
+- Quoted fields, embedded newlines, and escaping are not handled.
+- In the space-separated output, a space inside a field cannot be told apart from a separator.
+
+## Assignment 2: Python 
+
+
+
+
+
+
+
+
 
 ## AI use
 
