@@ -66,7 +66,7 @@ TreeHeight <- function(degrees, distance) {
     return (height)
 }
 
-#add as a column to My Data 
+#add as a column 
 
 height_m <- TreeHeight(MyData$Angle.degrees, MyData$Distance.m)
 
@@ -74,6 +74,7 @@ height_m <- TreeHeight(MyData$Angle.degrees, MyData$Distance.m)
 
 Result <- data.frame(MyData$Species, MyData$Distance.m, MyData$Angle.degrees, height_m)
 names(Result) <- c("Species", "Distance.m", "Angle.degrees", "height_m")
+
 
 # save the results to results folder w/in working directory, create if it doesn't exist 
 
