@@ -156,7 +156,8 @@ Rscript code/TreeHeight.R
 - Calculates tree heights for all trees in the data
 - Adds Tree height as a column
 - Builds a four-column table
-- Writes the result to `../results/<input-filename>.csv`
+- Builds output file name from input file basename 
+- Writes the result to `../results/<input-filename without .csv>__treeheight.csv`
 - Creates `../results/` if it does not exist.
 - Replaces the previous output on a rerun rather than appending.
 - Leaves the input file unchanged.
@@ -171,7 +172,8 @@ Check one height independently with a short R expression | 31.66583 * tan(41.282
 | Run using source | source("code/TreeHeight.R") | same output as Rscript code/TreeHeight.R | same output as Rscript code/TreeHeight.R | 
 
 **Limitations**
-
+- writes output using only basename, such that `data/input.csv` and `other/input.csv` are indistinguishable as `results/input_treeheight.csv`
+  
 ### Analyze Pound Hill species richness
 **Purpose:** 
 **Usage**
