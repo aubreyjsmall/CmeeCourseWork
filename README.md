@@ -138,6 +138,7 @@ python3 code/clean_silwood_trees.py
 
 ### Calculate tree heights
 **Purpose:** This function calculates the heights of trees given the distance of each tree from its base and the angle to its top, using  the trigonometric formula 
+
 **Files:**
 - Input data: `data/trees.csv`, copied from the course repository's `content/data/trees.csv` directory. The supplied originals are not modified.
 **Usage** (from `CMEECourseWork/`):
