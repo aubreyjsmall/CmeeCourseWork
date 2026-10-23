@@ -180,8 +180,8 @@ Check one height independently with a short R expression | 31.66583 * tan(41.282
 - Open the project in VS Code and set the working directory to the project root.
 - Ensure the required input CSV files are present in the data/ directory and the required R packages (reshape2 and ggplot2) are installed.
 - Run the analysis script from beginning to end: Rscript code/pound_hill_analysis.R
-
-Check the generated outputs in the results/ directory.
+- Check the generated outputs in the results/ directory.
+  
 **Files:**
 - code/pound_hill_analysis.R — R script containing the data processing, richness calculations and plotting.
 - data/pound_hill_data.csv — Input species abundance data.
