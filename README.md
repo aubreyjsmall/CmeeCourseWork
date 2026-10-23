@@ -175,17 +175,47 @@ Check one height independently with a short R expression | 31.66583 * tan(41.282
 - writes output using only basename, such that `data/input.csv` and `other/input.csv` are indistinguishable as `results/input_treeheight.csv`
   
 ### Analyze Pound Hill species richness
-**Purpose:** 
-**Usage**
-**Files:**
+**Purpose:** Processes the Pound Hill species abundance data to calculate species richness at the quadrat and plot levels. Summarises mean plot-level richness for each cultivation treatment and generates a figure comparing species richness between treatments.
+**Usage** 
+- Open the project in VS Code and set the working directory to the project root.
+- Ensure the required input CSV files are present in the data/ directory and the required R packages (reshape2 and ggplot2) are installed.
+- Run the analysis script from beginning to end: Rscript code/pound_hill_analysis.R
 
+Check the generated outputs in the results/ directory.
+**Files:**
+- code/pound_hill_analysis.R — R script containing the data processing, richness calculations and plotting.
+- data/pound_hill_data.csv — Input species abundance data.
+- data/pound_hill_meta_data.csv — Input metadata associated with the study.
+- results/pound_hill_plot_richness.csv — Output table containing cultivation treatment, block, plot and mean species richness. 
+- results/pound_hill_plot_richness.pdf — Output figure comparing mean plot-level species richness between cultivation treatments.
 
 **Behaviour:**
+- Checks that the required input CSV files exist and stops with an informative error if files are missing.
+- Reads the species abundance data and metadata.
+- Replaces blank abundance entries with zero, transposes the abundance matrix and reshapes the data into long format.
+- Converts cultivation, block, plot and quadrat identifiers to factors and species counts to integers.
+- Calculates quadrat-level species richness by counting the number of species with a count greater than zero.
+- Calculates mean quadrat-level richness for each plot, grouped by cultivation treatment, block and plot.
+- Creates the results/ directory if it does not already exist.
+- Saves the plot-level summary as a CSV file.
+- Generates and saves a PDF scatter plot comparing mean species richness between cultivation treatments.
+- Uses relative file paths and expects the script to be run from the project root.
+- Uses base R for the richness summaries (aggregate()) and requires reshape2 for reshaping and ggplot2 for plotting, unless these dependencies are removed or replaced.
 
-**Testing** 
+**Testing**
+
 | Test | Command | Expected | Observed |
 |---|---|---|---|
-
+| Check input data file | `file.exists("data/pound_hill_data.csv")` | `TRUE` | `TRUE` |
+| Check metadata file | `file.exists("data/pound_hill_meta_data.csv")` | `TRUE` | `TRUE` |
+| Check required packages | `requireNamespace("reshape2", quietly = TRUE)` and `requireNamespace("ggplot2", quietly = TRUE)` | Both return `TRUE` | Both return `TRUE`|
+| Check quadrat richness table | `head(QuadratRichness); str(QuadratRichness)` | Contains Cultivation, Block, Plot, Quadrat and numeric Richness columns | Contains Cultivation, Block, Plot, Quadrat and numeric Richness columns |
+| Check plot richness table | `head(PlotRichness); str(PlotRichness)` | Contains Cultivation, Block, Plot and numeric MeanRichness columns |Contains Cultivation, Block, Plot and numeric MeanRichness columns|
+| Check plot richness row count | `nrow(PlotRichness)` | 12 plots, assuming four plots per treatment across three treatments | 
+| Check output CSV | `file.exists("results/pound_hill_plot_richness.csv")` | `TRUE` after successful execution |
+| Check output PDF | `file.exists("results/pound_hill_plot_richness.pdf")` | `TRUE` after successful execution | 
+| Rerun the complete script | `Rscript code/pound_hill_analysis.R` | Completes without errors and regenerates outputs without duplicating rows | 
+| Run using source | `source("code/pound_hill_analysis.R")` | Produces the same analysis outputs as running the script with `Rscript` 
 
 
 ## AI use
