@@ -5,3 +5,5 @@ sandbox/
 results/
 sandbox/
 __pycache__/
+Rplots.pdf
+.RData
