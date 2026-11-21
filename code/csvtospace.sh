@@ -2,7 +2,7 @@
 # Author: Aubrey <a.small26@imperial.ac.uk>
 # script: csvtospace.sh
 # Desc: substitute the commas in the files with spaces
-#       saves the output into a .csv file
+#       saves the output into a .txt file
 # Arguments: 1-> Comma-delimited file
 # Date: Oct 2026
 
@@ -27,7 +27,7 @@ results_dir="$script_dir/../results"
 
 mkdir -p "$results_dir"
 
-output="$results_dir/$(basename "$1").csv"
+output="$results_dir/$(basename "$1").txt"
 
 #convert commas to spaces and write to the output file and check if the conversion was successful
 
@@ -38,4 +38,4 @@ if [[ $? -ne 0 ]]; then
 fi
 
 printf 'Done! Output is in %s\n' "$output"
-exit 
+exit 0
