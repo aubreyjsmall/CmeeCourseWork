@@ -41,5 +41,4 @@ if [[ $? -ne 0 ]]; then
 fi
 
 printf 'Done! Output is in %s\n' "$output"
-exit 
-
+exit 0
