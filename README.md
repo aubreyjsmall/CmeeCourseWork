@@ -35,7 +35,7 @@
 ### tabtocsv.sh
 **Purpose:** Converts a tab-delimited file into a comma-delimited file.
 **Usage** (from `CMEECourseWork/`):
-bash tabtocsv.sh <tab_delimited_file>
+`bash code/tabtocsv.sh <tab_delimited_file>`
 
 **Behaviour:**
 - Accepts exactly one readable input file and leaves it unchanged. 
@@ -78,7 +78,7 @@ oak             12] |
 ### csvtospace.sh
 **Purpose:** Converts a comma-separated file into a space-separated file.
 **Usage** (from `CMEECourseWork/`):
-bash csvtospace.sh <csv_file>
+`bash code/csvtospace.sh <csv_file>`
 
 **Behaviour:**
 - Accepts exactly one readable input file and leaves it unchanged. 
@@ -87,7 +87,7 @@ bash csvtospace.sh <csv_file>
   (e.g. `1800.csv` produces `../results/1800.csv.txt`).
 - Creates `../results/` if it does not exist.
 - Replaces the previous output on a rerun rather than appending.
-- Preserves empty fields: consecutive tabs become consecutive commas.
+- Preserves empty fields: consecutive commas become consecutive spaces.
 - Leaves the input file unchanged.
 - With no argument, prints a usage message to standard error and exits with status 2.
 - With a missing or unreadable file, prints an error to standard error and exits with status 1.
