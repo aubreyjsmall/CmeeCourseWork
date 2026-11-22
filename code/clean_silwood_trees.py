@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+# Author: Aubrey <a.small26@imperial.ac.uk>
+# script: clean_silwood_trees.py
+# Desc: Validate and clean the synthetic Silwood tree survey
+# Arguments: 1-> Raw survey file
+# Date: Nov 2026
+
 """Validate and clean the synthetic Silwood tree survey."""
 
 from __future__ import annotations
@@ -9,11 +15,12 @@ import re
 from pathlib import Path
 from typing import Iterable
 
-
+## Constants
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 INPUT_PATH = PROJECT_ROOT / "data" / "silwood_trees_raw.csv"
 RESULTS_DIR = PROJECT_ROOT / "results"
 
+### Field names and lookup tables
 INPUT_FIELDS = [
     "record_id",
     "location",
@@ -41,6 +48,7 @@ GENERA = {
     "fraxinus": "Fraxinus",
 }
 
+
 SPECIES = {
     "robur": "robur",
     "petraea": "petraea",
@@ -59,6 +67,7 @@ TAXON_PAIRS = [
     ("Fraxinus", "excelsior"),
 ]
 
+### Functions
 def load_records(path: Path = INPUT_PATH) -> list[dict[str, str]]:
     """Read the survey and check its column names."""
     with path.open(newline="", encoding="utf-8") as source:
@@ -68,7 +77,7 @@ def load_records(path: Path = INPUT_PATH) -> list[dict[str, str]]:
                 f"Expected columns {INPUT_FIELDS}, found {reader.fieldnames}"
             )
         return list(reader)
-
+    
 def parse_number(
     value: str | None,
     field_name: str,

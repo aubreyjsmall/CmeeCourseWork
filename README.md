@@ -120,10 +120,38 @@ python3 code/clean_silwood_trees.py
 - Every input record ends up in exactly one place: the clean file or the issues file.
 
 
-**Testing** 
-| Test | Command | Expected | Observed |
+**Testing**
+
+All tests are run from the repository root with `python3 code/test_silwood_trees.py`. The tests use small made-up records and temporary files; the raw survey is never modified. Result of the final run: **31/31 passed**.
+
+| Test | Check (test function) | Expected | Observed |
 |---|---|---|---|
-| Good Record | ---|---|---|
+| Valid record | `test_valid_record_accepted` | Accepted with no reasons; distance and angle stored as floats (`"30"` becomes `"30.0"`) | PASS |
+| Text cleaning | `test_text_cleaning`, `test_nashs_field_spelling` | Whitespace trimmed; location, genus and species given their standard spelling | PASS |
+| Missing values | `test_missing_values` | Empty, blank or absent field gives `missing <field>` | PASS |
+| Unrecognised values | `test_unrecognised_values` | Bad ID, location, genus or species gives `invalid <field>`; lowercase `st001` rejected | PASS |
+| Genus/species pair | `test_invalid_genus_species_pair` | `Acer robur` gives `invalid genus/species combination` | PASS |
+| Invalid numbers | `test_invalid_numbers` | `abc`, `nan`, `inf`, `-inf`, `12,5` give `invalid distance_m` / `invalid angle_degrees` | PASS |
+| Distance range | `test_distance_boundaries` | 0, -1 and 100.1 rejected; 0.1 and 100 accepted | PASS |
+| Angle range | `test_angle_boundaries` | 0, -5, 90 and 95 rejected; 0.1 and 89.9 accepted | PASS |
+| Edge cases: notation, apostrophe, short row | `test_scientific_notation_and_curly_apostrophe`, `test_short_row_missing_columns` | `1e2` accepted and `1e3` out of range; curly apostrophe in `Nash’s Field` rejected; a short row reports its missing columns | PASS |
+| Multiple problems | `test_multiple_problems_all_reported_in_order` | All reasons listed, in field order | PASS |
+| Duplicate ID | `test_duplicate_id_rejected_by_validate`, `test_duplicates_first_kept_and_rejected_row_does_not_reserve_id`, `test_id_whitespace_still_counts_as_duplicate` | First copy kept, later copy rejected as `duplicate record_id`; a rejected row does not block a later valid row with the same ID; ID whitespace ignored | PASS |
+| Issue report format | `test_issue_reasons_joined_with_semicolons` | Reasons joined with `; `; `source_row` counts from 2 | PASS |
+| Every row accounted for | `test_every_row_in_exactly_one_place` | accepted + rejected = input rows | PASS |
+| Sorting and empty input | `test_clean_records_sorted_by_id`, `test_empty_input`, `test_header_only_survey_gives_empty_outputs` | Clean output sorted by ID; empty or header-only input gives empty results with no error | PASS |
+| All rows invalid | `test_all_rows_invalid_gives_no_oaks` | No clean records, one issue per row, empty oak summary | PASS |
+| Oak counts | `test_oak_summary_exact_names_and_non_oaks` | `petraea` 1, `robur` 2; Acer excluded | PASS |
+| Oak near match | `test_oak_summary_near_match_not_counted` | `Quercu` not counted; `Querkus` rejected as `invalid genus` | PASS |
+| No oaks | `test_oak_summary_no_oaks` | Empty list, no error | PASS |
+| Loader | `test_load_records_rejects_wrong_columns`, `test_load_records_reads_small_file` | Wrong header raises `ValueError`; a valid small file is read | PASS |
+| End-to-end flow | `test_end_to_end_flow_valid_and_invalid` | Valid record in clean, invalid record in issues, invalid oak not counted in the summary | PASS |
+| Written outputs | `test_main_writes_expected_outputs` | `main()` on a 5-row survey writes 3 clean records, 2 issues, `petraea` 1 and `robur` 1 | PASS |
+| Import side effects | `test_import_has_no_side_effects` | No output; `results/` not created or changed | PASS |
+| Rerun | `test_running_twice_gives_same_results_and_raw_data_unchanged` | Identical outputs on two runs; raw data unchanged | PASS |
+| Real survey | `test_real_survey_accounting` | Accepted + rejected = raw rows; no duplicate IDs in the clean file | PASS |
+| Full script | `python3 code/clean_silwood_trees.py` | CCreated silwood_trees_clean.csv (24 records), silwood_tree_issues.csv (12 rows) and oak_species_counts.csv (2 species); 24 + 12 = 36 raw rows |
+
 
 ## Assignment 3: Biological Computing in R 
 
