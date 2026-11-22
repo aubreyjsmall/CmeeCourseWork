@@ -40,9 +40,9 @@
 **Behaviour:**
 - Accepts exactly one readable input file and leaves it unchanged. 
 - Paths containing spaces are supported.
-- Writes the result to `../results/<input-filename>.csv`
+- Writes the result to `CMEECoursework/results/<input-filename>.csv`
   (e.g. `tab-example.tsv` produces `../results/tab-example.tsv.csv`).
-- Creates `../results/` if it does not exist.
+- Creates `CMEECoursework/results/` if it does not exist.
 - Replaces the previous output on a rerun rather than appending.
 - Preserves empty fields: consecutive tabs become consecutive commas.
 - Leaves the input file unchanged.
@@ -53,25 +53,17 @@
 
 | Test | Command | Expected | Observed |
 |---|---|---|---|
-| Normal run | `bash tabtocsv.sh "$shell_practice/test.txt"` | Output in `../results/test.txt.csv` | [Creating a comma delimited version of /var/folders/vd/3r7d4bpj2tdc5j51j9d96jtw0000gn/T/tmp.Og1zEF5z8S/test.txt ...
-Done! Output is in ../results/test.txt.csv] |
-| Empty field kept | `cat ../results/test.txt.csv` | `oak,,12` | [species,count
-oak,,12] |
-| Rerun | Run again, then `cat` the output | No duplicate rows | [Creating a comma delimited version of /var/folders/vd/3r7d4bpj2tdc5j51j9d96jtw0000gn/T/tmp.Og1zEF5z8S/field notes.txt ...
-Done! Output is in ../results/field notes.txt.csv] [species,count
-oak,,12] |
-| Path with spaces | `bash tabtocsv.sh "$shell_practice/field notes.txt"` | Works without errors | [Creating a comma delimited version of /var/folders/vd/3r7d4bpj2tdc5j51j9d96jtw0000gn/T/tmp.Og1zEF5z8S/field notes.txt ...
-Done! Output is in ../results/field notes.txt.csv] |
-| No argument | `bash tabtocsv.sh; echo "$?"` | Usage message, status 2 | [Creating a comma delimited version of  ...
-usage: tabtocsv.sh <tab-delimited-file>] [2] |
-| Nonexistent file | `bash tabtocsv.sh nothere.txt; echo "$?"` | Error message, status 1 | [Creating a comma delimited version of nothere.txt ...
-error: file 'nothere.txt' does not exist or is not readable] [1] |
-| Input unchanged | `cat "$shell_practice/test.txt"` | Same as the original | [species count
-oak             12] |
+| Normal run | `bash code/tabtocsv.sh data/tab-example.tsv` | Output in `code/../results/tab-example.tsv.csv` | Done! Output is in code/../results/tab-example.tsv.csv |
+| Empty field kept | `cat results/tab-example.tsv.csv` | species,countoak,,12 | [species,countoak,,12] |
+| Rerun | Run again, then `cat` the output | No duplicate rows |  [species,countoak,,12] |
+| Path with spaces | `bash code/tabtocsv.sh "data/tab example.tsv"` | Works without errors | bash code/tabtocsv.sh "data/tab example.tsv" |
+| No argument | `bash code/tabtocsv.sh; echo "$?"` | Usage message, status 2 | Usage message, status 2|
+| Nonexistent file | `bash code/tabtocsv.sh nothere.txt; echo "$?"`| Error message, status 1 |Error message, status 1 |
+| Input unchanged | `cat data/tab-example.tsv` | Same as the original | [species countoak             12] |
 
 **Limitations**
 - Both scripts use simple character substitution with `tr`. They are not general parsers.
-- A comma inside a quoted CSV field is data, but these scripts would treat it as a separator.
+-  A comma inside a quoted CSV field is data, but these scripts would treat it as a separator.
 - Quoted fields, embedded newlines, and escaping are not handled.
 - In the space-separated output, a space inside a field cannot be told apart from a separator.
 
@@ -98,14 +90,13 @@ All tests used disposable files created in the sandbox directory, never the orig
 
 | Test | Command | Expected | Observed |
 |---|---|---|---|
-| Normal run | `bash csvtospace. sh " $ shell_practice/test.csv " 'sh "$shell_practice/test.csv"` | Output in `../results/test.csv.txt` | [Done! Output is in ../results/test.csv.txt] |
-| Empty field kept | `sed -n 2p ../results/test.csv.txt \| tr ' ' '_'` | `oak__12` | [oak__12] |
-| Rerun | Run again, then `wc -l ../results/test.csv.txt` | Still 2 lines | [2 ../results/test.csv.txt] |
-| Path with spaces | `bash csvtospace.sh "$shell_practice/field notes.csv"` | Works without errors | [Done! Output is in ../results/field notes.csv.txt] |
-| No argument | `bash csvtospace.sh; echo "$?"` | Usage message, status 2 | [usage: csvtospace.sh <csv_file>] [2] |
-| Nonexistent file | `bash csvtospace.sh nothere.csv; echo "$?"` | Error message, status 1 | [error: file 'nothere.csv' does not exist or is not readable] [1] |
-| Input unchanged | `cat "$shell_practice/test.csv"` | Still comma-separated | [species,count
-oak,,12] |
+| Normal run | `bash code/csvtospace.sh data/temperatures/1800.csv` | Output in `code/../results/1800.csv.txt`| Output in `code/../results/1800.csv.txt` |
+| Empty field kept | sed -n 2p results/1800.csv.txt \| tr ' ' '_' |`EZE00100082_18000101_TMIN_-135___E_` | EZE00100082_18000101_TMIN_-135___E_ |
+| Rerun | Run again, then `wc -l results/1800.csv.txt` | Still 1825 lines | 1825 results/1800.csv.txt |
+| Path with spaces | `bash code/csvtospace.sh "data/temperatures/1800 copy.csv"` | Works without errors | [Done! Output is in code/../results/1800 copy.csv.txt]|
+| No argument | `bash code/csvtospace.sh; echo "$?"` | Usage message, status 2 | Usage message, status 2 |
+| Nonexistent file | `bash code/csvtospace.sh nothere.csv; echo "$?"` | Error message, status 1 | message, status 1|
+| Input unchanged | `cat data/temperatures/1800.csv` | Still comma-separated | Still comma-separated |
 
 **Limitations**
 - Both scripts use simple character substitution with `tr`. They are not general parsers.
