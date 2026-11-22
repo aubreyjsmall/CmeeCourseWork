@@ -23,7 +23,7 @@ fi
 
 echo "Creating a comma delimited version of $1 ..."
 
-#Leave the input unchanged. Write the result to ../results/<input-filename>.csv. Make the results folder if it isn't there
+#Leave the input unchanged. Write the result to CMEECoursework/results/<input-filename>.csv. Make the results folder if it isn't there
 
 script_dir=$(dirname "$0")
 results_dir="$script_dir/../results"

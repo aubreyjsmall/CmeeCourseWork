@@ -20,7 +20,7 @@ if [[ ! -f "$1" || ! -r "$1" ]]; then
     exit 1
 fi
 
-#Leave the input unchanged. Write the result to ../results/<input-filename>.txt. Make the results folder if it isn't there
+#Leave the input unchanged. Write the result to CMEECoursework/results/<input-filename>.txt. Make the results folder if it isn't there
 
 script_dir=$(dirname "$0")
 results_dir="$script_dir/../results"
