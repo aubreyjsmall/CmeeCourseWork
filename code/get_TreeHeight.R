@@ -34,17 +34,15 @@ if (!all(c("Species", "Distance.m", "Angle.degrees") %in% names (MyData))) {
 
 # 2. Are Distance.m, and Angle.degrees numeric 
 
-if(class(MyData$Distance.m) != "numeric" | 
-   class(MyData$Angle.degrees) != "numeric") { 
+if (!is.numeric(MyData$Distance.m) || !is.numeric(MyData$Angle.degrees)) {
   stop("Distance.m and Angle.degrees must be numeric")
 }
 
 # 3. Are Distance.m, and Angle.degrees finite - No NA, NAN, of Inf values 
 
-if(!all(is.finite(MyData$Distance.m)) | !all(is.finite(MyData$Angle.degrees))) {
+if(!all(is.finite(MyData$Distance.m)) || !all(is.finite(MyData$Angle.degrees))) {
   stop("Distance.m and Angle.degrees must be finite numbers")
 }
-
 
 # 4. are the values for distance.m in the range (0 < Distance.m <= 100)
 
@@ -59,14 +57,11 @@ if(!all(MyData$Angle.degrees > 0 & MyData$Angle.degrees < 90)) {
 }
 
 
-
 #Function calculates tree heights for all trees in the data
 
 TreeHeight <- function(degrees, distance) {
     radians <- degrees * pi / 180
     height <- distance * tan(radians)
-    print(paste("Tree height is:", height))
-  
     return (height)
 }
 
@@ -81,14 +76,9 @@ names(Result) <- c("Species", "Distance.m", "Angle.degrees", "height_m")
 
 # build the name of the output file from the input file 
 
-#drop the folder, strsplit splits the input path by "/" and creates a list, [[1]] returns the contents of the list to a vector, v 
-v <- strsplit(input_path, "/")[[1]]
-#saves the name of the file by selecting the last item of the vector 
-file_name <- v[length(v)]
-#drop the ".csv" by separting file_name by ".csv" and using [[1]] to store the parts as a vector and [1] to select the first item and store it as base_name 
-base_name <- strsplit(file_name, ".csv")[[1]][1]
-#paste the basename onto the output path and store as variable, output 
-output_path <- paste("results/",base_name, "_treeheight.csv", sep = "" )
+# build the output name from the input's basename, minus its extension
+base_name <- tools::file_path_sans_ext(basename(input_path))
+output_path <- file.path("results", paste0(base_name, "_treeheights.csv"))
 
 # save the results to results folder w/in working directory, create if it doesn't exist 
 
