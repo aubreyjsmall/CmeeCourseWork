@@ -20,11 +20,6 @@ if (length(missing_files) > 0) {
   )
 }
 
-#check that required packages exist 
-
-
-
-
 #load data 
 MyData <- as.matrix(read.csv("data/pound_hill_data.csv", header = FALSE))
 #check data
@@ -142,16 +137,25 @@ if (!requireNamespace("ggplot2", quietly = TRUE)) {
 #load ggplot 
 library(ggplot2)
 
-p <- ggplot(PlotRichness, aes(x = Cultivation, y = MeanRichness)) + 
-  geom_point(size=I(3), alpha = 1/2) + 
+p <- ggplot(PlotRichness, aes(x = Cultivation, y = MeanRichness, colour = Block)) +
+  # height = 0 jitters sideways only, so richness values are unchanged;
+  # a fixed seed makes the figure identical on every run
+  geom_point(position = position_jitter(width = 0.1, height = 0, seed = 1),
+             size = I(3), alpha = 1/2) +
   scale_x_discrete("Cultivation month (treatment)") +
-  scale_y_continuous("Mean species richness per quadrat (one point per plot)") + 
+  scale_y_continuous("Mean species richness per quadrat (one point per plot)") +
   theme_bw()
-p
+
+# Each plot should appear exactly once, at its true mean richness
+plotted <- layer_data(p)
+stopifnot(nrow(plotted) == nrow(PlotRichness))
+stopifnot(isTRUE(all.equal(sort(plotted$y), sort(PlotRichness$MeanRichness))))
 
 pdf("results/pound_hill_plot_richness.pdf")
 print(p)
-dev.off()
+invisible(dev.off())
+
+aggregate(MeanRichness ~ Cultivation, PlotRichness, mean)
 
 print("Script complete :)")
 
