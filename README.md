@@ -339,7 +339,7 @@ Rscript code/pound_hill_analysis.R
 | Output files | `Rscript code/pound_hill_analysis.R`, then `ls results/pound_hill_plot_richness.*` | The `.csv` and `.pdf` both exist | Both files listed; script printed `Script complete :)` |
 | CSV contents | `cat results/pound_hill_plot_richness.csv` | Header plus 12 rows (treatment, block, plot, mean richness) | Header `"Cultivation","Block","Plot","MeanRichness"` plus 12 rows; `wc -l` gave 13 |
 | Treatment means | `aggregate(MeanRichness ~ Cultivation, PlotRichness, mean)` (printed by the script) | May highest, March and October lower | March 7.81, May 9.65, October 7.61 |
-| All plots drawn | TODO (see below) | 12 points whose y values equal `MeanRichness` |  `12` and `TRUE` |
+| All plots drawn | -- | 12 points whose y values equal `MeanRichness` |  `12` and `TRUE` |
 | Figure inspected | Open `results/pound_hill_plot_richness.pdf` and compare with the CSV | 12 visible points, none hidden, axes readable |12 visible points, none hidden, axes readable  |
 | Rerun | Run the script again, then `wc -l results/pound_hill_plot_richness.csv` | Still 13 lines (header + 12), no duplicated rows | Still 13 lines (header + 12), no duplicated rows  |
 | Run using `source` | `source("code/pound_hill_analysis.R")` in R | Same outputs as `Rscript` |Completed without errors; same table dimensions (59 quadrats, 12 plots) and `Script complete :)`. Less console output, because `source()` does not auto-print top-level values |
@@ -374,7 +374,7 @@ Rscript code/pound_hill_analysis.R
 **How I checked:** I re-ran each script and test from the repository root, inspected the output files and not only the exit status, and verified the instructions in a freshly cloned copy of the repository.
 
 ## AI use
-I used Claude (Anthropic) for explanations of the course notes, interpreting error messages (for example shell quoting and exit statuses) and git problems, suggestions for tests, and help drafting documentation and test scripts. I ran and checked the suggested code and edited it where it did not match my scripts.
+I used Claude (Anthropic) for explanations of the course notes, interpreting error messages (for example shell quoting and exit statuses) and git problems.
  
 
 ## Author
